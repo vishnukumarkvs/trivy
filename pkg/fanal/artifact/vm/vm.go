@@ -56,10 +56,10 @@ func NewArtifact(target string, c cache.ArtifactCache, w Walker, opt artifact.Op
 	switch targetType {
 	case TypeAMI:
 		target = strings.TrimPrefix(target, TypeAMI.Prefix())
-		return newAMI(target, storage, opt.AWSRegion, opt.AWSEndpoint)
+		return newAMI(target, storage, opt.AWSRegion, opt.AWSEndpoint, opt.AWSProfile)
 	case TypeEBS:
 		target = strings.TrimPrefix(target, TypeEBS.Prefix())
-		e, err := newEBS(target, storage, opt.AWSRegion, opt.AWSEndpoint)
+		e, err := newEBS(target, storage, opt.AWSRegion, opt.AWSEndpoint, opt.AWSProfile)
 		if err != nil {
 			return nil, xerrors.Errorf("new EBS error: %w", err)
 		}

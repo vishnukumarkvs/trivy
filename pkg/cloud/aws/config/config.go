@@ -19,7 +19,7 @@ func EndpointResolver(endpoint string) aws.EndpointResolverWithOptionsFunc {
 	})
 }
 
-func MakeAWSOptions(region, endpoint string) []func(*awsconfig.LoadOptions) error {
+func MakeAWSOptions(region, endpoint, profile string) []func(*awsconfig.LoadOptions) error {
 	var options []func(*awsconfig.LoadOptions) error
 
 	if region != "" {
@@ -30,11 +30,15 @@ func MakeAWSOptions(region, endpoint string) []func(*awsconfig.LoadOptions) erro
 		options = append(options, awsconfig.WithEndpointResolverWithOptions(EndpointResolver(endpoint)))
 	}
 
+	if profile != "" {
+		options = append(options, awsconfig.WithSharedConfigProfile(profile))
+	}
+
 	return options
 }
 
-func LoadDefaultAWSConfig(ctx context.Context, region, endpoint string) (aws.Config, error) {
-	cfg, err := awsconfig.LoadDefaultConfig(ctx, MakeAWSOptions(region, endpoint)...)
+func LoadDefaultAWSConfig(ctx context.Context, region, endpoint, profile string) (aws.Config, error) {
+	cfg, err := awsconfig.LoadDefaultConfig(ctx, MakeAWSOptions(region, endpoint, profile)...)
 	if err != nil {
 		return aws.Config{}, xerrors.Errorf("aws config load error: %w", err)
 	}

@@ -18,10 +18,10 @@ type AMI struct {
 	imageID string
 }
 
-func newAMI(imageID string, storage Storage, region, endpoint string) (*AMI, error) {
+func newAMI(imageID string, storage Storage, region, endpoint, profile string) (*AMI, error) {
 	// TODO: propagate context
 	ctx := context.TODO()
-	cfg, err := config.LoadDefaultAWSConfig(ctx, region, endpoint)
+	cfg, err := config.LoadDefaultAWSConfig(ctx, region, endpoint, profile)
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +42,7 @@ func newAMI(imageID string, storage Storage, region, endpoint string) (*AMI, err
 			continue
 		}
 		log.Logger.Infof("Snapshot %s found", snapshotID)
-		ebs, err := newEBS(snapshotID, storage, region, endpoint)
+		ebs, err := newEBS(snapshotID, storage, region, endpoint, profile)
 		if err != nil {
 			return nil, xerrors.Errorf("new EBS error: %w", err)
 		}

@@ -31,6 +31,11 @@ var (
 		ConfigName: "cloud.aws.arn",
 		Usage:      "The AWS ARN to show results for. Useful to filter results once a scan is cached.",
 	}
+	awsProfileFlag = Flag[string]{
+		Name:       "profile",
+		ConfigName: "cloud.aws.profile",
+		Usage:      "AWS profile to use for authentication",
+	}
 )
 
 type AWSFlagGroup struct {
@@ -40,6 +45,7 @@ type AWSFlagGroup struct {
 	SkipServices *Flag[[]string]
 	Account      *Flag[string]
 	ARN          *Flag[string]
+	Profile      *Flag[string]
 }
 
 type AWSOptions struct {
@@ -49,6 +55,7 @@ type AWSOptions struct {
 	SkipServices []string
 	Account      string
 	ARN          string
+	Profile      string
 }
 
 func NewAWSFlagGroup() *AWSFlagGroup {
@@ -59,6 +66,7 @@ func NewAWSFlagGroup() *AWSFlagGroup {
 		SkipServices: awsSkipServicesFlag.Clone(),
 		Account:      awsAccountFlag.Clone(),
 		ARN:          awsARNFlag.Clone(),
+		Profile:      awsProfileFlag.Clone(),
 	}
 }
 
@@ -74,6 +82,7 @@ func (f *AWSFlagGroup) Flags() []Flagger {
 		f.SkipServices,
 		f.Account,
 		f.ARN,
+		f.Profile,
 	}
 }
 
@@ -88,5 +97,6 @@ func (f *AWSFlagGroup) ToOptions() (AWSOptions, error) {
 		SkipServices: f.SkipServices.Value(),
 		Account:      f.Account.Value(),
 		ARN:          f.ARN.Value(),
+		Profile:      f.Profile.Value(),
 	}, nil
 }

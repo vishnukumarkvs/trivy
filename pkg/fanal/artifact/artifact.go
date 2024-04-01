@@ -26,6 +26,7 @@ type Option struct {
 	Parallel          int
 	AWSRegion         string
 	AWSEndpoint       string
+	AWSProfile        string
 	FileChecksum      bool // For SPDX
 
 	// Git repositories

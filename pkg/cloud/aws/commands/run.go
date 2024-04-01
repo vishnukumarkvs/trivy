@@ -22,10 +22,10 @@ import (
 
 var allSupportedServicesFunc = awsScanner.AllSupportedServices
 
-func getAccountIDAndRegion(ctx context.Context, region, endpoint string) (string, string, error) {
+func getAccountIDAndRegion(ctx context.Context, region, endpoint string, profile string) (string, string, error) {
 	log.Logger.Debug("Looking for AWS credentials provider...")
 
-	cfg, err := config.LoadDefaultAWSConfig(ctx, region, endpoint)
+	cfg, err := config.LoadDefaultAWSConfig(ctx, region, endpoint, profile)
 	if err != nil {
 		return "", "", err
 	}
@@ -77,9 +77,9 @@ func processOptions(ctx context.Context, opt *flag.Options) error {
 		return xerrors.Errorf("you must specify the single --service which the --arn relates to")
 	}
 
-	if opt.Account == "" || opt.Region == "" {
+	if opt.Account == "" || opt.Region == "" || opt.Profile == "" {
 		var err error
-		opt.Account, opt.Region, err = getAccountIDAndRegion(ctx, opt.Region, opt.Endpoint)
+		opt.Account, opt.Region, err = getAccountIDAndRegion(ctx, opt.Region, opt.Endpoint, opt.Profile)
 		if err != nil {
 			return err
 		}

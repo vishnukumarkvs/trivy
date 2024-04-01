@@ -66,6 +66,14 @@ func (s *AWSScanner) Scan(ctx context.Context, option flag.Options) (scan.Result
 		)
 	}
 
+	if option.Profile != "" {
+		scannerOpts = append(
+			scannerOpts,
+			aws.ScannerWithAWSProfile(option.Profile),
+		)
+		log.Logger.Debugf("Using profile %s for scanning services", option.Profile)
+	}
+
 	var policyPaths []string
 	var downloadedPolicyPaths []string
 	var err error
